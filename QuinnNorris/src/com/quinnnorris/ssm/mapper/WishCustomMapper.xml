@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quinnnorris.ssm.mapper.WishCustomMapper">
+
+    <select id="selByTimePage" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE pub_time > #{searchTime} AND wish_status = 0 ORDER BY wish_id DESC limit #{startPos},#{pageSize};
+    </select>
+    
+    <select id="countAllWishInWishList" resultType="int">
+        select count(*) from wish WHERE pub_time > #{searchTime};
+    </select>
+
+    <select id="countAllWishInWishListFin" resultType="int">
+        select count(*) from wish WHERE wish_status = 2;
+    </select>
+
+    <select id="countAllWishInWishListAll" resultType="int">
+        select count(*) from wish;
+    </select>
+    
+    <select id="selPostByStatus" resultType="wishCustom" parameterType="wishCustom">
+        select * from wish WHERE wish_status = 2 ORDER BY wish_id DESC limit #{startPos},#{pageSize};
+    </select>
+
+    <select id="selPostByStatusall" resultType="wishCustom" parameterType="wishCustom">
+        select * from wish ORDER BY wish_id DESC limit #{startPos},#{pageSize};
+    </select>
+
+    <update id="updateAllStatus" parameterType="wishCustom">
+        update wish set wish_status = 3 where
+        (#{searchTime} > get_time AND wish_status = 1) OR
+        (#{searchTime} > pub_time AND wish_status = 0)
+    </update>
+
+    <update id="updateGetIdByTimeInStatus4" parameterType="wishCustom">
+        update wish set wish_status = 3 where
+        (get_id = #{get_id} AND #{searchTime} > get_time AND wish_status = 1) OR
+        (post_id = #{post_id} AND #{searchTime} > pub_time AND wish_status = 0) OR
+        (post_id = #{post_id} AND #{searchTime} > get_time AND wish_status = 1)
+    </update>
+    
+    <select id="selWishNumByStatus0" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE post_id = #{post_id} AND (wish_status = 0 OR wish_status = 1);
+    </select>
+
+    <select id="selWishNumByStatus1" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE get_id = #{get_id} AND wish_status = 1;
+    </select>
+
+    <select id="selGetByPage" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE get_id = #{get_id} ORDER BY wish_id DESC limit #{startPos},#{pageSize};
+    </select>
+
+    <select id="selPostByPage" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE post_id = #{post_id} ORDER BY wish_id DESC limit #{startPos},#{pageSize};
+    </select>
+
+    <update id="updateGetTimeByWishId" parameterType="wishCustom">
+        update wish set get_time = #{get_time} where wish_id = #{wish_id} ;
+    </update>
+
+    <update id="deleteWishById" parameterType="wishCustom">
+        update wish set  wish_status = #{wish_status}  where wish_id = #{wish_id} ;
+    </update>
+
+    <insert id="insertNewWishs" useGeneratedKeys="true" keyProperty="id" parameterType="wishCustom">
+        insert into wish (post_id,cares,wish_status,nickname,titles,inners,conn_type,conn,pub_time,sexs,headp,date_pub_time)
+        values (#{post_id},#{cares},#{wish_status},#{nickname},#{titles},#{inners},#{conn_type},#{conn},#{pub_time},#{sexs},#{headp},#{date_pub_time});
+    </insert>
+
+
+
+
+
+    <select id="selWishByIdStatus" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE post_id = #{post_id} AND (wish_status = 1 OR wish_status = 0);
+    </select>
+
+
+
+
+
+    <select id="selWishById" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE post_id = #{post_id}
+    </select>
+
+    <select id="selWishByWishId" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE wish_id = #{wish_id}
+    </select>
+
+
+    <select id="selWishByGetIdAndStatus" parameterType="wishCustom" resultType="wishCustom">
+        select * from wish WHERE wish_status = #{wish_status} AND get_id = #{get_id}
+    </select>
+
+    <update id="addOneCareById" parameterType="wishCustom">
+        update wish set cares = cares + 1 where wish_id = #{wish_id};
+    </update>
+
+    <update id="updateGetIdByWishId" parameterType="wishCustom">
+        update wish set get_id = #{get_id} , wish_status = 1 where wish_id = #{wish_id} ;
+    </update>
+
+</mapper>

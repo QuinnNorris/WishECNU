@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quinnnorris.ssm.mapper.UserCustomMapper">
+
+    <select id="selectUserByPhoneAndPW" parameterType="UserCustom" resultType="UserCustom">
+        SELECT * FROM user WHERE phone = #{phone} AND password = #{password}
+    </select>
+
+    <select id="selectUserByPhone" parameterType="UserCustom" resultType="UserCustom">
+        SELECT * FROM user WHERE phone = #{phone}
+    </select>
+
+    <insert id="insertUserReturnId" useGeneratedKeys="true" keyProperty="id" parameterType="UserCustom">
+        INSERT INTO user (phone,password,get_h,post_h) VALUE (#{phone},#{password},5,5)
+    </insert>
+
+    <update id="updateUserHeadp" parameterType="UserCustom">
+        UPDATE user SET headp = #{headp} WHERE phone = #{phone}
+    </update>
+
+    <update id="updateUserPW" parameterType="UserCustom">
+        UPDATE user SET password = #{password} WHERE phone = #{phone}
+    </update>
+
+    <update id="updateUserHeart" parameterType="UserCustom">
+        update user set get_h = #{geth_now}, post_h = #{posth_now} where phone = #{phone}
+    </update>
+
+    <update id="updateGetHByUserid" parameterType="UserCustom">
+        update user set get_h = get_h - 1 where user_id = #{user_id} ;
+    </update>
+
+    <update id="updateSubPostHByUserid" parameterType="UserCustom">
+        update user set post_h = post_h - 1 where user_id = #{user_id} ;
+    </update>
+
+</mapper>
